@@ -41,5 +41,5 @@ func (server *IngressServer) Check(_ context.Context, req *auth.CheckRequest) (*
 		return envoy.CreateForbiddenResponse(result.Forbidden), nil
 	}
 
-	return envoy.CreateIngressOKResponse(result.HeadersToAdd, result.HeadersToRemove), nil
+	return envoy.CreateIngressOKResponse(result.HeadersToAdd, append(result.HeadersToRemove, wirepact.IdentityHeader)), nil
 }
