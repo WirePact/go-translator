@@ -10,6 +10,9 @@ type IngressResult struct {
 	// If set, the result for envoy is a "noop" OK result.
 	Skip bool
 
+	// If set, contains the reason why the request shall be forbidden.
+	Forbidden string
+
 	// Defines a list of header values that should be added to the request for
 	// the downstream.
 	HeadersToAdd []*core.HeaderValue

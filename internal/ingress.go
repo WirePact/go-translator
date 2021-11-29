@@ -37,5 +37,9 @@ func (server *IngressServer) Check(_ context.Context, req *auth.CheckRequest) (*
 		return envoy.CreateNoopOKResponse(), nil
 	}
 
+	if result.Forbidden != "" {
+		return envoy.CreateForbiddenResponse(result.Forbidden), nil
+	}
+
 	return envoy.CreateIngressOKResponse(result.HeadersToAdd, result.HeadersToRemove), nil
 }
