@@ -33,6 +33,9 @@ type EgressResult struct {
 	// If set, the result for envoy is a "noop" OK result.
 	Skip bool
 
+	// If set, contains the reason why the request shall be forbidden.
+	Forbidden string
+
 	// Defines the userID that should be encoded into the JWT.
 	// If an empty string is used, the request assumes that no userID
 	// could be found for the presented authorization and therefore, the

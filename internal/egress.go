@@ -32,5 +32,9 @@ func (server *EgressServer) Check(_ context.Context, req *auth.CheckRequest) (*a
 		return envoy.CreateForbiddenResponse("No UserID given for outbound communication."), nil
 	}
 
+	if result.Forbidden == "" {
+		return envoy.CreateForbiddenResponse(result.Forbidden), nil
+	}
+
 	return envoy.CreateEgressOKResponse(server.JWTConfig, result.UserID, result.HeadersToRemove)
 }
