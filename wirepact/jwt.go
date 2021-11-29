@@ -69,8 +69,8 @@ func CreateSignedJWTForUser(config *JWTConfig, userID string) (string, error) {
 // JWT signature against its own CA certificate. Then, if the JWT is valid
 // the subject is extracted. If any error occurs (missing certificate headers,
 // wrong certificate or other errors) the error is returned with an empty string.
-func GetJWTUserSubject(wirepactJWT string) (string, error) {
-	parsedJWT, err := jwt.ParseSigned(wirepactJWT)
+func GetJWTUserSubject(wirePactJWT string) (string, error) {
+	parsedJWT, err := jwt.ParseSigned(wirePactJWT)
 	if err != nil {
 		return "", err
 	}
