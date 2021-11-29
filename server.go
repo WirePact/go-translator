@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	internaltranslator "github.com/WirePact/go-translator/internal/translator"
+	"github.com/WirePact/go-translator/internal"
 	"github.com/WirePact/go-translator/pki"
 	"github.com/WirePact/go-translator/translator"
 	"github.com/WirePact/go-translator/wirepact"
@@ -52,7 +52,7 @@ type Translator struct {
 func NewTranslator(config *TranslatorConfig) (*Translator, error) {
 	var ingressOpts []grpc.ServerOption
 	ingressServer := grpc.NewServer(ingressOpts...)
-	auth.RegisterAuthorizationServer(ingressServer, &internaltranslator.IngressServer{
+	auth.RegisterAuthorizationServer(ingressServer, &internal.IngressServer{
 		IngressTranslator: config.IngressTranslator,
 	})
 
@@ -63,7 +63,7 @@ func NewTranslator(config *TranslatorConfig) (*Translator, error) {
 
 	var egressOpts []grpc.ServerOption
 	egressServer := grpc.NewServer(egressOpts...)
-	auth.RegisterAuthorizationServer(egressServer, &internaltranslator.EgressServer{
+	auth.RegisterAuthorizationServer(egressServer, &internal.EgressServer{
 		EgressTranslator: config.EgressTranslator,
 		JWTConfig:        &config.JWTConfig,
 	})

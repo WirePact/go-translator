@@ -1,16 +1,16 @@
-package translator
+package internal
 
 import (
 	"context"
 
 	"github.com/WirePact/go-translator/envoy"
-	gotranslator "github.com/WirePact/go-translator/translator"
+	"github.com/WirePact/go-translator/translator"
 	"github.com/WirePact/go-translator/wirepact"
 	auth "github.com/envoyproxy/go-control-plane/envoy/service/auth/v3"
 )
 
 type IngressServer struct {
-	IngressTranslator gotranslator.IngressTranslation
+	IngressTranslator translator.IngressTranslation
 }
 
 func (server *IngressServer) Check(_ context.Context, req *auth.CheckRequest) (*auth.CheckResponse, error) {
