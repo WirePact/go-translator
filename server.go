@@ -7,8 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/WirePact/go-translator/internal/translator"
+	internaltranslator "github.com/WirePact/go-translator/internal/translator"
 	"github.com/WirePact/go-translator/pki"
+	"github.com/WirePact/go-translator/translator"
 	"github.com/WirePact/go-translator/wirepact"
 	auth "github.com/envoyproxy/go-control-plane/envoy/service/auth/v3"
 	"google.golang.org/grpc"
@@ -20,13 +21,13 @@ type TranslatorConfig struct {
 	// Defaults to 50051.
 	IngressPort int
 	// Function for the incoming translation.
-	IngressTranslator IngressTranslation
+	IngressTranslator translator.IngressTranslation
 
 	// Port for the outgoing communication grpc server.
 	EgressPort int
 	// Defaults to 50052.
 	// Function for the outgoing translation.
-	EgressTranslator EgressTranslation
+	EgressTranslator translator.EgressTranslation
 
 	// Config for the PKI.
 	pki.Config
@@ -51,7 +52,7 @@ type Translator struct {
 func NewTranslator(config *TranslatorConfig) (*Translator, error) {
 	var ingressOpts []grpc.ServerOption
 	ingressServer := grpc.NewServer(ingressOpts...)
-	auth.RegisterAuthorizationServer(ingressServer, &translator.IngressServer{
+	auth.RegisterAuthorizationServer(ingressServer, &internaltranslator.IngressServer{
 		IngressTranslator: config.IngressTranslator,
 	})
 
@@ -62,7 +63,7 @@ func NewTranslator(config *TranslatorConfig) (*Translator, error) {
 
 	var egressOpts []grpc.ServerOption
 	egressServer := grpc.NewServer(egressOpts...)
-	auth.RegisterAuthorizationServer(egressServer, &translator.EgressServer{
+	auth.RegisterAuthorizationServer(egressServer, &internaltranslator.EgressServer{
 		EgressTranslator: config.EgressTranslator,
 		JWTConfig:        &config.JWTConfig,
 	})
