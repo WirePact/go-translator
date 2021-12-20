@@ -9,31 +9,9 @@ import (
 
 	"github.com/WirePact/go-translator/internal"
 	"github.com/WirePact/go-translator/pki"
-	"github.com/WirePact/go-translator/translator"
-	"github.com/WirePact/go-translator/wirepact"
 	auth "github.com/envoyproxy/go-control-plane/envoy/service/auth/v3"
 	"google.golang.org/grpc"
 )
-
-// TranslatorConfig contains all necessary configurations for the Translator.
-type TranslatorConfig struct {
-	// Port for the incoming communication grpc server.
-	// Defaults to 50051.
-	IngressPort int
-	// Function for the incoming translation.
-	IngressTranslator translator.IngressTranslation
-
-	// Port for the outgoing communication grpc server.
-	EgressPort int
-	// Defaults to 50052.
-	// Function for the outgoing translation.
-	EgressTranslator translator.EgressTranslation
-
-	// Config for the PKI.
-	pki.Config
-	// Config for the WirePact JWT.
-	wirepact.JWTConfig
-}
 
 // Translator acts as the server for translation and communicating with envoy.
 type Translator struct {
