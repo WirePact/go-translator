@@ -8,6 +8,7 @@ import (
 	"github.com/WirePact/go-translator/pki"
 	"github.com/WirePact/go-translator/translator"
 	"github.com/WirePact/go-translator/wirepact"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -52,18 +53,30 @@ func NewConfigFromEnvironmentVariables(
 	egressTranslator translator.EgressTranslation) (TranslatorConfig, error) {
 	pkiAddress := os.Getenv(TranslatorEnvPkiAddress)
 	if pkiAddress == "" {
+		logrus.Error("PKI_ADDRESS env variable is not set.")
 		return TranslatorConfig{}, errors.New(ErrPkiAddressNotSet)
 	}
 
 	commonName := os.Getenv(TranslatorEnvCommonName)
 	if commonName == "" {
+		logrus.Error("COMMON_NAME env variable is not set.")
 		return TranslatorConfig{}, errors.New(ErrCommonNameNotSet)
 	}
 
+	ingressPort := getIntEnvironment(TranslatorEnvIngressPort, TranslatorDefaultIngressPort)
+	egressPort := getIntEnvironment(TranslatorEnvEgressPort, TranslatorDefaultEgressPort)
+
+	logrus.WithFields(map[string]interface{}{
+		"COMMON_NAME":  commonName,
+		"PKI_ADDRESS":  pkiAddress,
+		"INGERSS_PORT": ingressPort,
+		"EGRESS_PORT":  egressPort,
+	}).Info("Create translator config.")
+
 	return TranslatorConfig{
-		IngressPort:       getIntEnvironment(TranslatorEnvIngressPort, TranslatorDefaultIngressPort),
+		IngressPort:       ingressPort,
 		IngressTranslator: ingressTranslator,
-		EgressPort:        getIntEnvironment(TranslatorEnvEgressPort, TranslatorDefaultEgressPort),
+		EgressPort:        egressPort,
 		EgressTranslator:  egressTranslator,
 		Config: pki.Config{
 			BaseAddress:           pkiAddress,
